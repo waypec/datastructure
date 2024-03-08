@@ -300,7 +300,22 @@ class Solution {
     }
 
     //背包理论： https://www.programmercarl.com/%E8%83%8C%E5%8C%85%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%8001%E8%83%8C%E5%8C%85-2.html#%E6%80%9D%E8%B7%AF
-    
+    public int weightValueBag() {
+        int[] weight = new int[]{1, 3, 4};
+        int[] value = new int[]{15, 20, 30};
+
+        int bagWeight = 4;
+        int[] dp = new int[bagWeight + 1];
+        Arrays.fill(dp, 0);
+        //注意顺序，先遍历物品，再遍历重量
+        for (int i = 0; i < weight.length; i++) {
+            //如果物品重量>背包重量，则没必要放入
+            for (int j = bagWeight; j >= weight[i]; j++) {
+                dp[j] = Math.max(dp[i], dp[j - weight[i]] + value[i]);
+            }
+        }
+        return dp[bagWeight];
+    }
 
 
 }
