@@ -177,7 +177,7 @@ class Solution {
         if (n < 2) {
             return n;
         }
-        int[] dp = new int[n+1];
+        int[] dp = new int[n + 1];
         dp[0] = 0;
         dp[1] = 1;
         for (int i = 2; i <= n; i++) {
@@ -299,6 +299,8 @@ class Solution {
         return dp[n];
     }
 
+    //背包理论： https://www.programmercarl.com/%E8%83%8C%E5%8C%85%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%8001%E8%83%8C%E5%8C%85-2.html#%E6%80%9D%E8%B7%AF
     
+
 
 }
