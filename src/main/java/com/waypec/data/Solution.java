@@ -339,6 +339,7 @@ class Solution {
 
 //    1049.最后一块石头的重量II
     public int lastStoneWeightII(int[] stones) {
+        int[] dp = new int[]{};
         
     }
 
