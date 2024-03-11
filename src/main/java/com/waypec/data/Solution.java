@@ -337,10 +337,20 @@ class Solution {
     }
 
 
-//    1049.最后一块石头的重量II
+    //    1049.最后一块石头的重量II
     public int lastStoneWeightII(int[] stones) {
-        int[] dp = new int[]{};
-        
+        int sum = 0;
+        for (int i = 0; i < stones.length; i++) {
+            sum += stones[i];
+        }
+        int target = sum / 2;
+        int[] dp = new int[target + 1];
+        //dp[j]表示0-i选物品，容量为j的背包，最大可以装dp[j]的价值
+        for (int i = 0; i < stones.length; i++) {
+            for (int j = target; j >= stones[i]; j--) {
+                dp[j] = Math.max(dp[j], dp[j - stones[i]] + stones[i]);
+            }
+        }
+        return sum - 2 * dp[target];
     }
-
 }
