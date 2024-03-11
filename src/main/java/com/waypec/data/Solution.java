@@ -353,4 +353,42 @@ class Solution {
         }
         return sum - 2 * dp[target];
     }
+
+    //494.目标和
+    public int findTargetSumWays(int[] nums, int target) {
+        int sum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+        }
+        if ((target + sum) % 2 == 1) {
+            return 0;
+        }
+        if (Math.abs(target) > sum) {
+            return 0;
+        }
+        int x = (target + sum) / 2;
+        int[] dp = new int[x + 1];
+        dp[0] = 1;
+        //dp[j]表示从[0-i]取物品，最大价值为j的种类有dp[j]种
+
+        //例如：dp[j]，j 为5，
+        //已经有一个1（nums[i]） 的话，有 dp[4]种方法 凑成 容量为5的背包。
+        //已经有一个2（nums[i]） 的话，有 dp[3]种方法 凑成 容量为5的背包。
+        //已经有一个3（nums[i]） 的话，有 dp[2]中方法 凑成 容量为5的背包
+        //已经有一个4（nums[i]） 的话，有 dp[1]中方法 凑成 容量为5的背包
+        //已经有一个5 （nums[i]）的话，有 dp[0]中方法 凑成 容量为5的背包
+
+        //那么凑整dp[5]有多少方法呢，也就是把 所有的 dp[j - nums[i]] 累加起来。
+        //
+        //所以求组合类问题的公式，都是类似这种：
+        //
+        //dp[j] += dp[j - nums[i]]
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = x; j >= nums[i]; j--) {
+                dp[j] += dp[j - nums[i]];
+            }
+        }
+        return dp[x];
+    }
+
 }
