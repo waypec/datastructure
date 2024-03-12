@@ -454,4 +454,46 @@ class Solution {
         return dp[n];
     }
 
+
+    //139.单词拆分
+    public boolean wordBreak(String s, List<String> wordDict) {
+        //wordDict是物品，s是背包，
+        //dp[i]表示取wordDict[0-j],能否凑成s的前i个
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
+        //因为可以任取，所以是正序遍历
+        //因为是排列，所以背包在外循环，物品在内循环
+
+        //注意背包的取值范围是0-s.length()!!!
+        for (int i = 0; i <= s.length(); i++) {
+            for (int j = 0; j < i; j++) {
+                //s.substring是左闭右开
+                String sub = s.substring(j, i);
+                if (dp[j] && wordDict.contains(sub)) {
+                    dp[i] = true;
+                }
+            }
+        }
+        return dp[s.length()];
+    }
+
+
+    //198.打家劫舍
+    public int rob(int[] nums) {
+        if (nums.length == 0 || nums == null) {
+            return 0;
+        }
+        if (nums.length == 1) {
+            return nums[0];
+        }
+        int[] dp = new int[nums.length];
+        //dp[i]表示偷0-i以内的房屋，最大的价值
+        dp[0] = nums[0];
+        dp[1] = Math.max(nums[0], nums[1]);
+
+        for (int i = 2; i < nums.length; i++) {
+            dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1]);
+        }
+        return dp[nums.length - 1];
+    }
 }
