@@ -391,4 +391,58 @@ class Solution {
         return dp[x];
     }
 
+    //518.零钱兑换II
+    public int change(int amount, int[] coins) {
+        int[] dp = new int[amount + 1];
+        dp[0] = 1;
+        for (int i = 0; i < coins.length; i++) {
+            for (int j = coins[i]; j <= amount; j++) {
+                dp[j] += dp[j - coins[i]];
+            }
+        }
+        return dp[amount];
+    }
+
+    //377. 组合总和 Ⅳ
+    //该题为求出的排列数，即不同顺序也可以，需要先遍历背包再遍历物品
+    public int combinationSum4(int[] nums, int target) {
+        int[] dp = new int[target + 1];
+        dp[0] = 1;
+        for (int i = 0; i <= target; i++) {
+            for (int j = 0; j < nums.length; j++) {
+                if (i >= nums[j]) {
+                    dp[i] += dp[i - nums[j]];
+                }
+            }
+        }
+        return dp[target];
+    }
+
+    //322. 零钱兑换
+    //该题为完全背包，即可以无限取nums[i],故内循环遍历顺序为正序
+    public int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[0] = 0;
+        for (int i = 0; i < coins.length; i++) {
+            for (int j = coins[i]; j <= amount; j++) {
+                if (dp[j - coins[i]] != Integer.MAX_VALUE) {
+                    dp[j] = Math.min(dp[j], dp[j - coins[i]] + 1);
+                }
+            }
+        }
+        return dp[amount] == Integer.MAX_VALUE ? -1 : dp[amount];
+    }
+
+    //279.完全平方数
+    //组合问题，num[i]可以任取，故为内循环正序遍历
+    public int numSquares(int n) {
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        int num = n / 2;
+        for (int i = 0; i <= num + 1; i++) {
+            
+        }
+    }
+
 }
