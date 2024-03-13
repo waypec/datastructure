@@ -438,20 +438,62 @@ class Solution {
     //组合问题，num[i]可以任取，故为内循环正序遍历
     public int numSquares(int n) {
         int[] dp = new int[n + 1];
-        dp[0] = 0;
         int max = Integer.MAX_VALUE;
-        //从递归公式dp[j] = min(dp[j - i * i] + 1, dp[j]);
-        // 可以看出每次dp[j]都要选最小的，所以非0下标的dp[j]一定要初始为最大值，
-        // 这样dp[j]在递推的时候才不会被初始值覆盖。
         Arrays.fill(dp, max);
+        //注意dp[0]的初始化要在填充数组之后
+        dp[0] = 0;
         //遍历物品
         for (int i = 1; i * i <= n; i++) {
             //遍历背包
             for (int j = i * i; j <= n; j++) {
-                dp[j] = Math.min(dp[j], dp[j - i * i] + 1);
+                if (dp[j - i * i] != max) {
+                    dp[j] = Math.min(dp[j], dp[j - i * i] + 1);
+                }
             }
         }
         return dp[n];
     }
 
+
+    //139.单词拆分
+    public boolean wordBreak(String s, List<String> wordDict) {
+        //wordDict是物品，s是背包，
+        //dp[i]表示取wordDict[0-j],能否凑成s的前i个
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
+        //因为可以任取，所以是正序遍历
+        //因为是排列，所以背包在外循环，物品在内循环
+
+        //注意背包的取值范围是0-s.length()!!!
+        for (int i = 0; i <= s.length(); i++) {
+            for (int j = 0; j < i; j++) {
+                //s.substring是左闭右开
+                String sub = s.substring(j, i);
+                if (dp[j] && wordDict.contains(sub)) {
+                    dp[i] = true;
+                }
+            }
+        }
+        return dp[s.length()];
+    }
+
+
+    //198.打家劫舍
+    public int rob(int[] nums) {
+        if (nums.length == 0 || nums == null) {
+            return 0;
+        }
+        if (nums.length == 1) {
+            return nums[0];
+        }
+        int[] dp = new int[nums.length];
+        //dp[i]表示偷0-i以内的房屋，最大的价值
+        dp[0] = nums[0];
+        dp[1] = Math.max(nums[0], nums[1]);
+
+        for (int i = 2; i < nums.length; i++) {
+            dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1]);
+        }
+        return dp[nums.length - 1];
+    }
 }

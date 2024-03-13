@@ -29,5 +29,8 @@ public class Test {
         int[] nums = new int[]{4,2,0,3,2,5};
 
         solution.trap(nums);
+
+        String a = "hello";
+        System.out.println(a.substring(0,3));
     }
 }
