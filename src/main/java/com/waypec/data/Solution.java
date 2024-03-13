@@ -438,11 +438,20 @@ class Solution {
     //组合问题，num[i]可以任取，故为内循环正序遍历
     public int numSquares(int n) {
         int[] dp = new int[n + 1];
-        dp[0] = 1;
-        int num = n / 2;
-        for (int i = 0; i <= num + 1; i++) {
-            
+        dp[0] = 0;
+        int max = Integer.MAX_VALUE;
+        //从递归公式dp[j] = min(dp[j - i * i] + 1, dp[j]);
+        // 可以看出每次dp[j]都要选最小的，所以非0下标的dp[j]一定要初始为最大值，
+        // 这样dp[j]在递推的时候才不会被初始值覆盖。
+        Arrays.fill(dp, max);
+        //遍历物品
+        for (int i = 1; i * i <= n; i++) {
+            //遍历背包
+            for (int j = i * i; j <= n; j++) {
+                dp[j] = Math.min(dp[j], dp[j - i * i] + 1);
+            }
         }
+        return dp[n];
     }
 
 }
