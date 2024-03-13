@@ -494,9 +494,78 @@ class Solution {
         dp[0] = nums[0];
         dp[1] = Math.max(nums[0], nums[1]);
 
+        //{偷第i个房间、不偷第i个房间}选最大值
         for (int i = 2; i < nums.length; i++) {
             dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1]);
         }
         return dp[nums.length - 1];
     }
+
+    //121. 买卖股票的最佳时机
+    public int maxProfit(int[] prices) {
+        int[][] dp = new int[prices.length][2];
+        dp[0][0] = -prices[0];
+        dp[0][1] = 0;
+        for (int i = 1; i < prices.length; i++) {
+            //第i天持有股票的收益：第i-1天就持有，今天才买入
+            dp[i][0] = Math.max(dp[i - 1][0], -prices[i]);
+            //第i天不持有股票的收益：第i-1天就不持有，今天才卖出
+            dp[i][1] = Math.max(dp[i - 1][1], dp[i - 1][0] + prices[i]);
+        }
+        return dp[prices.length - 1][1];
+    }
+
+    //122.买卖股票的最佳时机II 多次买卖
+    public int maxProfit2(int[] prices) {
+        int[][] dp = new int[prices.length][2];
+        dp[0][0] = -prices[0];
+        dp[0][1] = 0;
+        for (int i = 1; i < prices.length; i++) {
+            //第i天持有股票
+            dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] - prices[i]);
+            dp[i][1] = Math.max(dp[i - 1][1], dp[i - 1][0] + prices[i]);
+        }
+        return dp[prices.length - 1][1];
+    }
+
+
+    //123.买卖股票的最佳时机III 两次买卖
+    public int maxProfit3(int[] prices) {
+        int[][] dp = new int[prices.length][5];
+        dp[0][0] = 0;
+        dp[0][1] = -prices[0];
+        dp[0][2] = 0;
+        dp[0][3] = -prices[0];
+        dp[0][4] = 0;
+        for (int i = 1; i < prices.length; i++) {
+            //0没有操作 （其实我们也可以不设置这个状态）
+            //1第一次持有股票
+            //2第一次不持有股票
+            //3第二次持有股票
+            //4第二次不持有股票
+            dp[i][0] = dp[i - 1][0];
+            dp[i][1] = Math.max(dp[i - 1][1], dp[i - 1][0] - prices[i]);
+            dp[i][2] = Math.max(dp[i - 1][2], dp[i - 1][1] + prices[i]);
+            dp[i][3] = Math.max(dp[i - 1][3], dp[i - 1][2] - prices[i]);
+            dp[i][4] = Math.max(dp[i - 1][4], dp[i - 1][3] + prices[i]);
+        }
+        return dp[prices.length - 1][4];
+    }
+
+    //188.买卖股票的最佳时机IV K次买卖
+    public int maxProfit(int k, int[] prices) {
+        //总共有2*k+1种状态
+        int[][] dp = new int[prices.length][2 * k + 1];
+        for (int i = 0; i < k; i++) {
+            dp[0][2 * i + 1] = -prices[0];
+        }
+        for (int i = 1; i < prices.length; i++) {
+            for (int j = 0; j < k; j++) {
+                dp[i][2 * j + 1] = Math.max(dp[i - 1][2 * j + 1], dp[i - 1][2 * j] - prices[i]);
+                dp[i][2 * j + 2] = Math.max(dp[i - 1][2 * j + 2], dp[i - 1][2 * j + 1] + prices[i]);
+            }
+        }
+        return dp[prices.length - 1][2 * k];
+    }
+
 }
