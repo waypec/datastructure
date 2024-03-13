@@ -439,6 +439,9 @@ class Solution {
     public int numSquares(int n) {
         int[] dp = new int[n + 1];
         int max = Integer.MAX_VALUE;
+        //从递归公式dp[j] = min(dp[j - i * i] + 1, dp[j]);
+        // 可以看出每次dp[j]都要选最小的，所以非0下标的dp[j]一定要初始为最大值，
+        // 这样dp[j]在递推的时候才不会被初始值覆盖。
         Arrays.fill(dp, max);
         //注意dp[0]的初始化要在填充数组之后
         dp[0] = 0;
