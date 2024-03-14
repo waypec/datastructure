@@ -568,4 +568,36 @@ class Solution {
         return dp[prices.length - 1][2 * k];
     }
 
+    //714.买卖股票的最佳时机含手续费
+    public int maxProfit(int[] prices, int fee) {
+        int[][] dp = new int[prices.length][2];
+        dp[0][0] = -prices[0];
+        dp[0][1] = 0;
+        for (int i = 1; i < prices.length; i++) {
+            //持有股票
+            dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] - prices[i]);
+            //不持有股票
+            dp[i][1] = Math.max(dp[i - 1][1], dp[i - 1][0] + prices[i] - fee);
+        }
+        return Math.max(dp[prices.length - 1][0], dp[prices.length - 1][1]);
+    }
+
+    //300.最长递增子序列
+    public int lengthOfLIS(int[] nums) {
+        //dp[i]表示以nums[i]结尾的最长递增子序列
+        int[] dp = new int[nums.length];
+        Arrays.fill(dp, 1);
+        int res = 1;
+        for (int i = 1; i < nums.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    //dp[i]是dp[j]里面去最大值+1
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+            res = Math.max(res, dp[i]);
+        }
+        return res;
+    }
+
 }
