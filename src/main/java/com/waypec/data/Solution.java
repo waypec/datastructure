@@ -600,4 +600,29 @@ class Solution {
         return res;
     }
 
+    //674. 最长连续递增序列
+    public int findLengthOfLCIS(int[] nums) {
+        //dp[i]表示以nums[i]结尾的最长连续递增序列
+        int[] dp = new int[nums.length];
+        Arrays.fill(dp, 1);
+        int res = 1;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] > nums[i - 1]) {
+                dp[i] = dp[i - 1] + 1;
+            }
+            res = Math.max(res, dp[i]);
+        }
+        return res;
+    }
+
+    //718. 最长重复子数组
+    public int findLength(int[] nums1, int[] nums2) {
+        int[][] dp = new int[nums1.length + 1][nums2.length + 1];
+        for (int i = 1; i <= nums1.length; i++) {
+            for (int j = 1; j <= nums2.length; j++) {
+                dp[i][j] = 
+            }
+        }
+    }
+
 }
