@@ -663,7 +663,21 @@ class Solution {
 
     //53. 最大子序和
     public int maxSubArray(int[] nums) {
-        
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        //dp[i]表示以下标i结尾，最大子序和为dp[i]
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        int res = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            //dp[i - 1] + nums[i]，即：nums[i]加入当前连续子序列和
+            //nums[i]，即：从头开始计算当前连续子序列和
+            dp[i] = Math.max(dp[i - 1] + nums[i], nums[i]);
+            res = Math.max(res, dp[i]);
+        }
+        return res;
     }
 
 
