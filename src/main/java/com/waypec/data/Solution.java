@@ -621,7 +621,7 @@ class Solution {
     // 给两个整数数组 A 和 B ，返回两个数组中公共的、长度最长的子数组的长度。
     public int findLength(int[] nums1, int[] nums2) {
 
-        //dp[i][j]表示以数组A取nums1[i-1]，数组B取nums[j-1]，即A取到i-1，B取到j-1,
+        //dp[i][j]表示以数组A取nums1[i-1]，数组B取nums[j-1]结尾，A取到i-1，B取到j-1,
         //相当于在原来数组的基础上又加了一行和一列，dp[0][j]和dp[i][0]没有意义
         //为什么不去到nums1[i],nums[j]，因为这样需要初始化nums[0][j]和nums[i][0]，麻烦！！
         int[][] dp = new int[nums1.length + 1][nums2.length + 1];
@@ -640,6 +640,31 @@ class Solution {
     }
 
     //1143.最长公共子序列
+    public int longestCommonSubsequence(String text1, String text2) {
+        //dp[i][j]表示text1取[0,i-1]，text2取[0,j-1],以i-1,j-1结尾，最长公共子序列的长度，子序列可以不连续
+        //相当于在原来数组的基础上又加了一行和一列，dp[0][j]和dp[i][0]没有意义
+        //为什么不去到nums1[i],nums[j]，因为这样需要初始化nums[0][j]和nums[i][0]，麻烦！！
+        int[][] dp = new int[text1.length() + 1][text2.length() + 1];
+        //最后的结果是所有的dp[i][j]里面取最大值
+        int res = 0;
+
+        for (int i = 1; i <= text1.length(); i++) {
+            for (int j = 1; j <= text2.length(); j++) {
+                if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i][j - 1], dp[i - 1][j]);
+                }
+                res = Math.max(res, dp[i][j]);
+            }
+        }
+        return res;
+    }
+
+    //53. 最大子序和
+    public int maxSubArray(int[] nums) {
+        
+    }
 
 
     //test占位
