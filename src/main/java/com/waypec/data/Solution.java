@@ -2,6 +2,7 @@ package com.waypec.data;
 
 
 import java.util.*;
+import java.util.zip.DeflaterOutputStream;
 
 class Solution {
     public int[] twoSum(int[] nums, int target) {
@@ -599,5 +600,63 @@ class Solution {
         }
         return res;
     }
+
+    //674. 最长连续递增序列
+    public int findLengthOfLCIS(int[] nums) {
+        //dp[i]表示数组取以nums[i]结尾，最长连续递增子序列的长度为dp[i]
+        int[] dp = new int[nums.length];
+        Arrays.fill(dp, 1);
+        //最终的结果是dp[i]里最大的那个值
+        int res = 0;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] > nums[i - 1]) {
+                dp[i] = dp[i - 1] + 1;
+            }
+            res = Math.max(res, dp[i]);
+        }
+        return res;
+    }
+
+    //718. 最长重复子数组
+    // 给两个整数数组 A 和 B ，返回两个数组中公共的、长度最长的子数组的长度。
+    public int findLength(int[] nums1, int[] nums2) {
+
+        //dp[i][j]表示以数组A取nums1[i-1]，数组B取nums[j-1]，即A取到i-1，B取到j-1,
+        //相当于在原来数组的基础上又加了一行和一列，dp[0][j]和dp[i][0]没有意义
+        //为什么不去到nums1[i],nums[j]，因为这样需要初始化nums[0][j]和nums[i][0]，麻烦！！
+        int[][] dp = new int[nums1.length + 1][nums2.length + 1];
+
+        //最后的结果是所有的dp[i][j]里面取最大值
+        int res = 0;
+        for (int i = 1; i <= nums1.length; i++) {
+            for (int j = 1; j <= nums2.length; j++) {
+                if (nums1[i - 1] == nums2[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                }
+                res = Math.max(res, dp[i][j]);
+            }
+        }
+        return res;
+    }
+
+    //1143.最长公共子序列
+
+
+    //test占位
+    public int test(int[] nums1, int[] nums2) {
+        for (int i = 0; i < 100; i++) {
+
+        }
+
+        for (int i = 0; i < 100; i++) {
+
+        }
+
+        for (int i = 0; i < 100; i++) {
+
+        }
+        return 0;
+    }
+
 
 }
