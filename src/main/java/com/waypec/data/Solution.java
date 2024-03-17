@@ -680,6 +680,44 @@ class Solution {
         return res;
     }
 
+    //392.判断子序列,判断s是否为t的子序列
+    public boolean isSubsequence(String s, String t) {
+        //dp[i][j]表示s以下标i-1结尾，t以下标j-1结尾，s和t的相同的子序列长度为dp[i][j],注意s是不能动的
+        int[][] dp = new int[s.length() + 1][t.length() + 1];
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 1; j <= t.length(); j++) {
+                if (s.charAt(i - 1) == t.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    //t删除下标为j-1的
+                    dp[i][j] = dp[i][j - 1];
+                }
+            }
+        }
+        return dp[s.length()][t.length()] == s.length();
+    }
+
+    //115.不同的子序列
+    public int numDistinct(String s, String t) {
+        //dp[i][j]表示s以下标i-1,t以下标j-1为结尾，s的子序列中t出现的个数为dp[i][j]
+        int[][] dp = new int[s.length() + 1][t.length() + 1];
+        for (int i = 0; i <=s.length() ; i++) {
+            dp[i][0] = 1;
+        }
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 1; j <= t.length(); j++) {
+                if (s.charAt(i - 1) == t.charAt(j - 1)) {
+                    //如果结尾元素相同,用该元素匹配+不用该元素匹配
+                    dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+                } else {
+                    //如果结尾元素不同,删除s的元素，继续匹配
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+        }
+        return dp[s.length()][t.length()];
+    }
+
 
     //test占位
     public int test(int[] nums1, int[] nums2) {
