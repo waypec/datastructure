@@ -788,6 +788,28 @@ class Solution {
         return res;
     }
 
+    //516.最长回文子序列
+    public int longestPalindromeSubseq(String s) {
+        //dp[i][j]表示字符串s在区间范围[i,j]，最长回文子序列的长度为dp[i][j]
+        int[][] dp = new int[s.length()][s.length()];
+        for (int i = s.length() - 1; i >= 0; i--) {
+            for (int j = i; j <s.length() ; j++) {
+                if (s.charAt(i) == s.charAt(j)) {
+                    if (i == j) {
+                        dp[i][j] = 1;
+                    } else if (j - i == 1) {
+                        dp[i][j] = 2;
+                    } else {
+                        dp[i][j] = dp[i + 1][j - 1] + 2;
+                    }
+                } else {
+                    dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[0][s.length() - 1];
+    }
+
     //test占位
     public int test(int[] nums1, int[] nums2) {
         for (int i = 0; i < 100; i++) {
