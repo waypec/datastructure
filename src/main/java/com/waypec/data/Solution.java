@@ -2,6 +2,7 @@ package com.waypec.data;
 
 
 import java.util.*;
+import java.util.zip.DeflaterOutputStream;
 
 class Solution {
     public int[] twoSum(int[] nums, int target) {
@@ -602,10 +603,11 @@ class Solution {
 
     //674. 最长连续递增序列
     public int findLengthOfLCIS(int[] nums) {
-        //dp[i]表示以nums[i]结尾的最长连续递增序列
+        //dp[i]表示数组取以nums[i]结尾，最长连续递增子序列的长度为dp[i]
         int[] dp = new int[nums.length];
         Arrays.fill(dp, 1);
-        int res = 1;
+        //最终的结果是dp[i]里最大的那个值
+        int res = 0;
         for (int i = 1; i < nums.length; i++) {
             if (nums[i] > nums[i - 1]) {
                 dp[i] = dp[i - 1] + 1;
@@ -616,13 +618,122 @@ class Solution {
     }
 
     //718. 最长重复子数组
+    // 给两个整数数组 A 和 B ，返回两个数组中公共的、长度最长的子数组的长度。
     public int findLength(int[] nums1, int[] nums2) {
+
+        //dp[i][j]表示以数组A取nums1[i-1]，数组B取nums[j-1]结尾，A取到i-1，B取到j-1,
+        //相当于在原来数组的基础上又加了一行和一列，dp[0][j]和dp[i][0]没有意义
+        //为什么不去到nums1[i],nums[j]，因为这样需要初始化nums[0][j]和nums[i][0]，麻烦！！
         int[][] dp = new int[nums1.length + 1][nums2.length + 1];
+
+        //最后的结果是所有的dp[i][j]里面取最大值
+        int res = 0;
         for (int i = 1; i <= nums1.length; i++) {
             for (int j = 1; j <= nums2.length; j++) {
-                dp[i][j] = 
+                if (nums1[i - 1] == nums2[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                }
+                res = Math.max(res, dp[i][j]);
             }
         }
+        return res;
     }
+
+    //1143.最长公共子序列
+    public int longestCommonSubsequence(String text1, String text2) {
+        //dp[i][j]表示text1取[0,i-1]，text2取[0,j-1],以i-1,j-1结尾，最长公共子序列的长度，子序列可以不连续
+        //相当于在原来数组的基础上又加了一行和一列，dp[0][j]和dp[i][0]没有意义
+        //为什么不去到nums1[i],nums[j]，因为这样需要初始化nums[0][j]和nums[i][0]，麻烦！！
+        int[][] dp = new int[text1.length() + 1][text2.length() + 1];
+        //最后的结果是所有的dp[i][j]里面取最大值
+        int res = 0;
+
+        for (int i = 1; i <= text1.length(); i++) {
+            for (int j = 1; j <= text2.length(); j++) {
+                if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i][j - 1], dp[i - 1][j]);
+                }
+                res = Math.max(res, dp[i][j]);
+            }
+        }
+        return res;
+    }
+
+    //53. 最大子序和
+    public int maxSubArray(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        //dp[i]表示以下标i结尾，最大子序和为dp[i]
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        int res = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            //dp[i - 1] + nums[i]，即：nums[i]加入当前连续子序列和
+            //nums[i]，即：从头开始计算当前连续子序列和
+            dp[i] = Math.max(dp[i - 1] + nums[i], nums[i]);
+            res = Math.max(res, dp[i]);
+        }
+        return res;
+    }
+
+    //392.判断子序列,判断s是否为t的子序列
+    public boolean isSubsequence(String s, String t) {
+        //dp[i][j]表示s以下标i-1结尾，t以下标j-1结尾，s和t的相同的子序列长度为dp[i][j],注意s是不能动的
+        int[][] dp = new int[s.length() + 1][t.length() + 1];
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 1; j <= t.length(); j++) {
+                if (s.charAt(i - 1) == t.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    //t删除下标为j-1的
+                    dp[i][j] = dp[i][j - 1];
+                }
+            }
+        }
+        return dp[s.length()][t.length()] == s.length();
+    }
+
+    //115.不同的子序列
+    public int numDistinct(String s, String t) {
+        //dp[i][j]表示s以下标i-1,t以下标j-1为结尾，s的子序列中t出现的个数为dp[i][j]
+        int[][] dp = new int[s.length() + 1][t.length() + 1];
+        for (int i = 0; i <=s.length() ; i++) {
+            dp[i][0] = 1;
+        }
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 1; j <= t.length(); j++) {
+                if (s.charAt(i - 1) == t.charAt(j - 1)) {
+                    //如果结尾元素相同,用该元素匹配+不用该元素匹配
+                    dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+                } else {
+                    //如果结尾元素不同,删除s的元素，继续匹配
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+        }
+        return dp[s.length()][t.length()];
+    }
+
+
+    //test占位
+    public int test(int[] nums1, int[] nums2) {
+        for (int i = 0; i < 100; i++) {
+
+        }
+
+        for (int i = 0; i < 100; i++) {
+
+        }
+
+        for (int i = 0; i < 100; i++) {
+
+        }
+        return 0;
+    }
+
 
 }
