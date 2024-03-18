@@ -793,7 +793,7 @@ class Solution {
         //dp[i][j]表示字符串s在区间范围[i,j]，最长回文子序列的长度为dp[i][j]
         int[][] dp = new int[s.length()][s.length()];
         for (int i = s.length() - 1; i >= 0; i--) {
-            for (int j = i; j <s.length() ; j++) {
+            for (int j = i; j < s.length(); j++) {
                 if (s.charAt(i) == s.charAt(j)) {
                     if (i == j) {
                         dp[i][j] = 1;
@@ -808,6 +808,30 @@ class Solution {
             }
         }
         return dp[0][s.length() - 1];
+    }
+
+    //第77题. 组合
+    LinkedList<Integer> path = new LinkedList<>();
+    List<List<Integer>> res = new ArrayList<>();
+    public List<List<Integer>> combine(int n, int k) {
+
+        backtracking(n, k, 1);
+        return res;
+
+    }
+
+    public void backtracking(int n, int k, int startIndex) {
+        //递归终止的条件
+        if (path.size() == k) {
+            res.add(new ArrayList<>(path));//存放符合条件结果的集合
+            return;
+        }
+
+        for (int i = startIndex; i <= n; i++) {
+            path.add(i); //处理节点
+            backtracking(n, k, startIndex + 1); //递归
+            path.removeLast(); //回溯，撤销处理的节点
+        }
     }
 
     //test占位
