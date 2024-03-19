@@ -858,13 +858,44 @@ class Solution {
         }
 
         //startIndex表示每次循环起始位置
-        for (int i = startIndex; i <= 9-(k-path.size())+1; i++) {
+        for (int i = startIndex; i <= 9 - (k - path.size()) + 1; i++) {
             path.add(i);//处理节点
             sum += i;
             trackingCombinationSum3(k, n, i + 1, sum, path, res);//递归
             path.removeLast();//回溯，撤销处理的节点
             sum -= i;
         }
+    }
+
+    //17.电话号码的字母组合
+    public List<String> letterCombinations(String digits) {
+        List<String> res = new ArrayList<>();
+        if (digits == null || digits.length() == 0) {
+            return res;
+        }
+        String[] numString = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        int num = 0;
+        StringBuilder path = new StringBuilder();
+        backLetterCombinations(digits, numString, num, path, res);
+        return res;
+    }
+
+    public void backLetterCombinations(String digits, String[] numString, int num, StringBuilder path, List<String> res) {
+        if (path.length() == digits.length()) {
+            res.add(path.toString());
+            return;
+        }
+        String str = numString[digits.charAt(num) - '0'];
+        for (int i = 0; i < str.length(); i++) {
+            path.append(str.charAt(i));
+            backLetterCombinations(digits, numString, num + 1, path, res);
+            path.deleteCharAt(path.length() - 1);
+        }
+    }
+
+    //39. 组合总和，可以重复选
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        
     }
 
 
