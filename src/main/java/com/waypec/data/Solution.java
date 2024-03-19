@@ -2,7 +2,6 @@ package com.waypec.data;
 
 
 import java.util.*;
-import java.util.zip.DeflaterOutputStream;
 
 class Solution {
     public int[] twoSum(int[] nums, int target) {
@@ -813,6 +812,7 @@ class Solution {
     //第77题. 组合
     LinkedList<Integer> path = new LinkedList<>();
     List<List<Integer>> res = new ArrayList<>();
+
     public List<List<Integer>> combine(int n, int k) {
 
         backtracking(n, k, 1);
@@ -827,12 +827,46 @@ class Solution {
             return;
         }
 
-        for (int i = startIndex; i <= n; i++) {
+        //列表中的元素个数 >= 还需要元素的个数
+        //n-i+1>=k-path.size()
+        for (int i = startIndex; i <= n + 1 - (k - path.size()); i++) {
             path.add(i); //处理节点
-            backtracking(n, k, startIndex + 1); //递归
+            backtracking(n, k, i + 1); //递归
             path.removeLast(); //回溯，撤销处理的节点
         }
     }
+
+    //216.组合总和III
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        LinkedList<Integer> path = new LinkedList<>();
+        List<List<Integer>> res = new LinkedList<>();
+        int startIndex = 1;
+        int sum = 0;
+        trackingCombinationSum3(k, n, startIndex, sum, path, res);
+        return res;
+    }
+
+    public void trackingCombinationSum3(int k, int n, int startIndex, int sum, LinkedList<Integer> path, List<List<Integer>> res) {
+        if (sum > n) {
+            return;
+        }
+        if (path.size() == k) {//递归停止条件
+            if (sum == n) {//递归停止条件
+                res.add(new ArrayList<>(path));
+                return;
+            }
+        }
+
+        //startIndex表示每次循环起始位置
+        for (int i = startIndex; i <= 9-(k-path.size())+1; i++) {
+            path.add(i);//处理节点
+            sum += i;
+            trackingCombinationSum3(k, n, i + 1, sum, path, res);//递归
+            path.removeLast();//回溯，撤销处理的节点
+            sum -= i;
+        }
+    }
+
 
     //test占位
     public int test(int[] nums1, int[] nums2) {
