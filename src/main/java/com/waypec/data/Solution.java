@@ -701,7 +701,7 @@ class Solution {
     public int numDistinct(String s, String t) {
         //dp[i][j]表示s以下标i-1,t以下标j-1为结尾，s的子序列中t出现的个数为dp[i][j]
         int[][] dp = new int[s.length() + 1][t.length() + 1];
-        for (int i = 0; i <=s.length() ; i++) {
+        for (int i = 0; i <= s.length(); i++) {
             dp[i][0] = 1;
         }
         for (int i = 1; i <= s.length(); i++) {
@@ -718,6 +718,121 @@ class Solution {
         return dp[s.length()][t.length()];
     }
 
+    //583. 两个字符串的删除操作
+    //给定两个单词 word1 和 word2 ，返回使得 word1 和  word2 相同所需的最小步数。
+    public int minDistance(String word1, String word2) {
+        //dp[i][j]表示word1以下标i-1为结尾，word2以下标j-1为结尾时，达到相等，所需删除的最少次数
+        int[][] dp = new int[word1.length() + 1][word2.length() + 1];
+        for (int i = 0; i <= word1.length(); i++) {
+            dp[i][0] = i;
+        }
+        for (int j = 0; j <= word2.length(); j++) {
+            dp[0][j] = j;
+        }
+        for (int i = 1; i <= word1.length(); i++) {
+            for (int j = 1; j <= word2.length(); j++) {
+                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = Math.min(dp[i][j - 1] + 1, dp[i - 1][j] + 1);
+                }
+            }
+        }
+        return dp[word1.length()][word2.length()];
+
+    }
+
+    //72. 编辑距离
+    public int minDistance1(String word1, String word2) {
+        //dp[i][j]表示word1以下标i-1为结尾，word2以下标j-1为结尾时，达到相等，所需操作的最少次数
+        int[][] dp = new int[word1.length() + 1][word2.length() + 1];
+        for (int i = 0; i <= word1.length(); i++) {
+            dp[i][0] = i;
+        }
+        for (int j = 0; j <= word2.length(); j++) {
+            dp[0][j] = j;
+        }
+
+        for (int i = 1; i <= word1.length(); i++) {
+            for (int j = 1; j <= word2.length(); j++) {
+                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = Math.min(dp[i][j - 1] + 1, dp[i - 1][j] + 1);
+                    dp[i][j] = Math.min(dp[i][j], dp[i - 1][j - 1] + 1);
+                }
+            }
+        }
+        return dp[word1.length()][word2.length()];
+
+    }
+
+    //647. 回文子串
+    public int countSubstrings(String s) {
+        //dp[i][j]表示在区间范围[i,j]，s的子串是否为回文串
+        int res = 0;
+        boolean[][] dp = new boolean[s.length()][s.length()];
+        for (int i = s.length() - 1; i >= 0; i--) {
+            for (int j = i; j < s.length(); j++) {
+                if (s.charAt(i) == s.charAt(j)) {
+                    if (j - i <= 1) {
+                        dp[i][j] = true;
+                        res++;
+                    } else if (dp[i + 1][j - 1]) {
+                        dp[i][j] = true;
+                        res++;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    //516.最长回文子序列
+    public int longestPalindromeSubseq(String s) {
+        //dp[i][j]表示字符串s在区间范围[i,j]，最长回文子序列的长度为dp[i][j]
+        int[][] dp = new int[s.length()][s.length()];
+        for (int i = s.length() - 1; i >= 0; i--) {
+            for (int j = i; j < s.length(); j++) {
+                if (s.charAt(i) == s.charAt(j)) {
+                    if (i == j) {
+                        dp[i][j] = 1;
+                    } else if (j - i == 1) {
+                        dp[i][j] = 2;
+                    } else {
+                        dp[i][j] = dp[i + 1][j - 1] + 2;
+                    }
+                } else {
+                    dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[0][s.length() - 1];
+    }
+
+    //第77题. 组合
+    LinkedList<Integer> path = new LinkedList<>();
+    List<List<Integer>> res = new ArrayList<>();
+    public List<List<Integer>> combine(int n, int k) {
+
+        backtracking(n, k, 1);
+        return res;
+
+    }
+
+    public void backtracking(int n, int k, int startIndex) {
+        //递归终止的条件
+        if (path.size() == k) {
+            res.add(new ArrayList<>(path));//存放符合条件结果的集合
+            return;
+        }
+
+        for (int i = startIndex; i <= n; i++) {
+            path.add(i); //处理节点
+            backtracking(n, k, startIndex + 1); //递归
+            path.removeLast(); //回溯，撤销处理的节点
+        }
+    }
 
     //test占位
     public int test(int[] nums1, int[] nums2) {
