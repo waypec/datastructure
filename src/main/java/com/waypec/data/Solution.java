@@ -893,9 +893,33 @@ class Solution {
         }
     }
 
+    LinkedList<Integer> pathCom = new LinkedList<>();
+    List<List<Integer>> resCom = new ArrayList<>();
     //39. 组合总和，可以重复选
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
-        
+        int sum = 0;
+        int startIndex = 0;
+        trackCom(candidates,target,startIndex,sum);
+        return resCom;
+    }
+
+    public void trackCom(int[] candidates, int target, int startIndex, int sum) {
+
+        if (sum > target) {
+            return;
+        }
+        if (sum == target) {
+            resCom.add(new ArrayList<>(pathCom));
+        }
+
+        for (int i = startIndex; i < candidates.length; i++) {
+            pathCom.add(candidates[i]);//处理节点
+            sum += candidates[i];
+            //一个集合，组合问题，可以重复选，故startIndex传入i
+            trackCom(candidates, target, i, sum);//递归
+            pathCom.removeLast();
+            sum -= candidates[i];
+        }
     }
 
 
