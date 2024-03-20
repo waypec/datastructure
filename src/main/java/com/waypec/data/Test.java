@@ -1,5 +1,7 @@
 package com.waypec.data;
 
+import java.util.List;
+
 public class Test {
     public volatile int inc = 0;
 
@@ -26,11 +28,13 @@ public class Test {
 
 
         Solution solution = new Solution();
-        int[] nums = new int[]{4,2,0,3,2,5};
-
-        solution.trap(nums);
 
         String a = "hello";
         System.out.println(a.substring(0,3));
+
+        int[] nums = new int[]{4,0,3,2,5};
+        List<List<Integer>> res = solution.permute(nums);
+        System.out.println(res);
+
     }
 }

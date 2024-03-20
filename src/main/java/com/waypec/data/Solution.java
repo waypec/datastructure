@@ -926,11 +926,12 @@ class Solution {
     //40.组合总和II
     LinkedList<Integer> pathCom2 = new LinkedList<>();
     List<List<Integer>> resCom2 = new ArrayList<>();
+
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
         Arrays.sort(candidates);
         int startIndex = 0;
         int sum = 0;
-        combinationSum2Helper(candidates,target,startIndex,sum);
+        combinationSum2Helper(candidates, target, startIndex, sum);
         return resCom2;
     }
 
@@ -941,7 +942,7 @@ class Solution {
             return;
         }
         for (int i = startIndex; i < candidates.length; i++) {
-            
+
             pathCom2.add(candidates[i]);
             sum += candidates[i];
             combinationSum2Helper(candidates, target, startIndex + 1, sum);
@@ -1025,9 +1026,68 @@ class Solution {
             }
             pathSeq.add(nums[i]);
             set.add(nums[i]);
-            findSubsequencesHelper(nums,i+1);
+            findSubsequencesHelper(nums, i + 1);
             pathSeq.removeLast();
             set.remove(set.size() - 1);
+        }
+    }
+
+    //46.全排列
+    LinkedList<Integer> pathPer = new LinkedList<>();
+    List<List<Integer>> resPer = new ArrayList<>();
+
+    public List<List<Integer>> permute(int[] nums) {
+        permuteHelper(nums);
+        return resPer;
+    }
+
+    public void permuteHelper(int[] nums) {
+        if (pathPer.size() == nums.length) {
+            resPer.add(new ArrayList<>(pathPer));
+            return;
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            if (pathPer.contains(nums[i])) {
+                continue;
+            }
+            pathPer.add(nums[i]);
+            permuteHelper(nums);
+            pathPer.removeLast();
+        }
+    }
+
+    //47.全排列 II
+    LinkedList<Integer> pathUni = new LinkedList<>();
+    List<List<Integer>> resUni = new ArrayList<>();
+    boolean[] usedUni;
+
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        Arrays.sort(nums);
+        usedUni = new boolean[nums.length];
+        permuteUniqueHelper(nums);
+        return resUni;
+    }
+
+    public void permuteUniqueHelper(int[] nums) {
+        if (pathUni.size() == nums.length) {
+            resUni.add(new ArrayList<>(pathUni));
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            //去除重复元素
+            if (i > 0 && nums[i] == nums[i - 1] && usedUni[i - 1] == false) {
+                continue;
+            }
+            if (usedUni[i] == true) {
+                continue;
+            }
+            usedUni[i] = true;
+            pathUni.add(nums[i]);
+            permuteUniqueHelper(nums);
+            usedUni[i] = false;
+            pathUni.removeLast();
+
         }
     }
 
