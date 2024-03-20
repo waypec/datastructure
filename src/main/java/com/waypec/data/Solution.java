@@ -1091,6 +1091,25 @@ class Solution {
         }
     }
 
+    //455. 分发饼干
+    public int findContentChildren(int[] g, int[] s) {
+        //大饼干既可以满足大胃口的，也可以满足小胃口的，满足小胃口的就浪费了，优先满足大胃口的
+        Arrays.sort(g);
+        Arrays.sort(s);
+        int res = 0;
+        int index = s.length - 1;//饼干最大值下标
+
+        //遍历胃口
+        for (int i = g.length - 1; i >= 0; i--) {
+            if (index >= 0 && s[index] >= g[i]) {
+                res++;
+                index--;
+            }
+        }
+
+        return res;
+    }
+
 
     //test占位
     public int test(int[] nums1, int[] nums2) {
