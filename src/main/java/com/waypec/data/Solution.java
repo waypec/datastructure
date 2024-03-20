@@ -895,11 +895,12 @@ class Solution {
 
     LinkedList<Integer> pathCom = new LinkedList<>();
     List<List<Integer>> resCom = new ArrayList<>();
+
     //39. 组合总和，可以重复选
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         int sum = 0;
         int startIndex = 0;
-        trackCom(candidates,target,startIndex,sum);
+        trackCom(candidates, target, startIndex, sum);
         return resCom;
     }
 
@@ -919,6 +920,114 @@ class Solution {
             trackCom(candidates, target, i, sum);//递归
             pathCom.removeLast();
             sum -= candidates[i];
+        }
+    }
+
+    //40.组合总和II
+    LinkedList<Integer> pathCom2 = new LinkedList<>();
+    List<List<Integer>> resCom2 = new ArrayList<>();
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        int startIndex = 0;
+        int sum = 0;
+        combinationSum2Helper(candidates,target,startIndex,sum);
+        return resCom2;
+    }
+
+    public void combinationSum2Helper(int[] candidates, int target, int startIndex, int sum) {
+
+        if (sum == target) {
+            resCom2.add(new ArrayList<>(pathCom2));
+            return;
+        }
+        for (int i = startIndex; i < candidates.length; i++) {
+            
+            pathCom2.add(candidates[i]);
+            sum += candidates[i];
+            combinationSum2Helper(candidates, target, startIndex + 1, sum);
+            pathCom2.removeLast();
+            sum -= candidates[i];
+        }
+    }
+
+    LinkedList<Integer> pathSub = new LinkedList<>();
+    List<List<Integer>> resSub = new ArrayList<>();
+
+    //78.子集
+    public List<List<Integer>> subsets(int[] nums) {
+        int startIndex = 0;
+        trackSubsets(nums, startIndex);
+        return resSub;
+    }
+
+    public void trackSubsets(int[] nums, int startIndex) {
+        resSub.add(new ArrayList<>(pathSub));
+        if (startIndex >= nums.length) {
+            return;
+        }
+
+        for (int i = startIndex; i < nums.length; i++) {
+            pathSub.add(nums[i]);
+            trackSubsets(nums, i + 1);
+            pathSub.removeLast();
+        }
+    }
+
+    LinkedList<Integer> pathSubN = new LinkedList<>();
+    List<List<Integer>> resSubN = new ArrayList<>();
+    boolean[] usedSub;
+
+    //90.子集II
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        int startIndex = 0;
+        Arrays.sort(nums);
+        usedSub = new boolean[nums.length];
+        trackSubsetsWithDup(nums, startIndex);
+        return resSubN;
+    }
+
+    public void trackSubsetsWithDup(int[] nums, int startIndex) {
+        resSubN.add(new ArrayList<>(pathSubN));
+        if (startIndex >= nums.length) {
+            return;
+        }
+
+        for (int i = startIndex; i < nums.length; i++) {
+            if (i > 0 && nums[i] == nums[i - 1] && usedSub[i - 1] == false) {
+                continue;
+            }
+            pathSubN.add(nums[i]);
+            usedSub[i] = true;
+            trackSubsetsWithDup(nums, i + 1);
+            usedSub[i] = false;
+            pathSubN.removeLast();
+        }
+    }
+
+    LinkedList<Integer> pathSeq = new LinkedList<>();
+    List<List<Integer>> resSeq = new ArrayList<>();
+
+    //491.递增子序列
+    public List<List<Integer>> findSubsequences(int[] nums) {
+        int startIndex = 0;
+        findSubsequencesHelper(nums, startIndex);
+        return resSeq;
+    }
+
+    public void findSubsequencesHelper(int[] nums, int startIndex) {
+        if (pathSeq.size() > 1) {
+            resSeq.add(new ArrayList<>(pathSeq));
+        }
+        HashSet<Integer> set = new HashSet<>();
+        for (int i = startIndex; i < nums.length; i++) {
+            if ((!pathSeq.isEmpty() && nums[i] < pathSeq.get(pathSeq.size() - 1)) || set.contains(nums[i])) {
+                continue;
+            }
+            pathSeq.add(nums[i]);
+            set.add(nums[i]);
+            findSubsequencesHelper(nums,i+1);
+            pathSeq.removeLast();
+            set.remove(set.size() - 1);
         }
     }
 
