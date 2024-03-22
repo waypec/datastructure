@@ -1142,6 +1142,94 @@ class Solution {
         return res;
     }
 
+    //55. 跳跃游戏
+    public boolean canJump(int[] nums) {
+        int cover = 0;
+        for (int i = 0; i <= cover; i++) {
+            cover = Math.max(cover, i + nums[i]);
+            if (cover >= nums.length - 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //1005.K次取反后最大化的数组和
+    public int largestSumAfterKNegations(int[] nums, int k) {
+        Integer[] temp = new Integer[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            temp[i] = nums[i];
+        }
+        Arrays.sort(temp, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return Math.abs(o2) - Math.abs(o1);
+            }
+        });
+
+        for (int i = 0; i < temp.length; i++) {
+            if (temp[i] < 0 && k > 0) {
+                temp[i] = -temp[i];
+                k--;
+            }
+        }
+        if (k % 2 == 1) {
+            temp[temp.length - 1] = -temp[temp.length - 1];
+        }
+        int sum = 0;
+        for (int i = 0; i < temp.length; i++) {
+            sum += temp[i];
+        }
+        return sum;
+    }
+
+    //135. 分发糖果
+    public int candy(int[] ratings) {
+        int[] res = new int[ratings.length];
+        Arrays.fill(res, 1);
+        for (int i = 1; i < ratings.length; i++) {
+            if (ratings[i] > ratings[i - 1]) {
+                res[i] = res[i - 1] + 1;
+            }
+        }
+
+        for (int i = ratings.length - 2; i >= 0; i--) {
+            if (ratings[i] > ratings[i + 1]) {
+                res[i] = Math.max(res[i + 1] + 1, res[i]);
+            }
+        }
+        int sum = 0;
+        for (int i = 0; i < res.length; i++) {
+            sum += res[i];
+        }
+        return sum;
+    }
+
+    //406.根据身高重建队列
+    public int[][] reconstructQueue(int[][] people) {
+        Arrays.sort(people,(p1,p2)->{
+            if (p2[0] != p1[0]) {
+                //身高从大到小排序
+                return p2[0] - p1[0];
+            } else {
+                //位次从小到大排序
+                return p1[1] - p2[1];
+            }
+        });
+        LinkedList<int[]> res = new LinkedList<>();
+        for (int i = 0; i < people.length; i++) {
+            res.add(people[i][1], people[i]);
+        }
+        return res.toArray(new int[people.length][]);
+    }
+
+    public static void main(String[] args) {
+        int[] nums = new int[]{4, 2, 3};
+        Solution solution = new Solution();
+        System.out.println(solution.largestSumAfterKNegations(nums, 1));
+
+    }
+
     //test占位
     public int test(int[] nums1, int[] nums2) {
         for (int i = 0; i < 100; i++) {
