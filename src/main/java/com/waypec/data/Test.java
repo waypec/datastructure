@@ -36,5 +36,8 @@ public class Test {
         List<List<Integer>> res = solution.permute(nums);
         System.out.println(res);
 
+        int res1 = solution.maxSubArray1(new int[]{-2, 1, -3, 4, -1, 2, 1, -5, 4});
+        System.out.println(res1);
+
     }
 }

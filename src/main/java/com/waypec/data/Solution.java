@@ -1110,6 +1110,37 @@ class Solution {
         return res;
     }
 
+    //53. 最大子序和
+    public int maxSubArray1(int[] nums) {
+
+        int res = nums[0];
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            dp[i] = Math.max(dp[i - 1] + nums[i], nums[i]);
+            res = Math.max(res, dp[i]);
+        }
+        return res;
+    }
+
+    //贪心解法
+    public int maxSubArray2(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int res = nums[0];
+        int sum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+            if (sum > res) {
+                res = sum;
+            }
+            if (sum <= 0) {
+                sum = 0;
+            }
+        }
+        return res;
+    }
 
     //test占位
     public int test(int[] nums1, int[] nums2) {
