@@ -1,6 +1,7 @@
 package com.waypec.data;
 
 
+import javax.swing.*;
 import java.util.*;
 
 class Solution {
@@ -1207,7 +1208,7 @@ class Solution {
 
     //406.根据身高重建队列
     public int[][] reconstructQueue(int[][] people) {
-        Arrays.sort(people,(p1,p2)->{
+        Arrays.sort(people, (p1, p2) -> {
             if (p2[0] != p1[0]) {
                 //身高从大到小排序
                 return p2[0] - p1[0];
@@ -1223,12 +1224,83 @@ class Solution {
         return res.toArray(new int[people.length][]);
     }
 
+    // 452. 用最少数量的箭引爆气球
+    public int findMinArrowShots(int[][] points) {
+        //更新共用的最小右边界
+        //按照左边界进行排序
+        Arrays.sort(points, (a, b) -> {
+            if (a[0] > b[0]) {
+                return 1;
+            } else {
+                return -1;
+            }
+        });
+        int res = 1;
+        for (int i = 1; i < points.length; i++) {
+            //如果该元素的左边界>上一个元素的右边界，则res+1
+            if (points[i][0] > points[i - 1][1]) {
+                res++;
+            } else {
+                //如果如果该元素的左边界<上一个元素的右边界（右边界需要不断更新，且是同一个组里面共用的右边界）
+                points[i][1] = Math.min(points[i][1], points[i - 1][1]);
+            }
+        }
+        return res;
+    }
+
+    //435. 无重叠区间
+    public int eraseOverlapIntervals(int[][] intervals) {
+        Arrays.sort(intervals,(a,b)->{
+            if (a[0] > b[0]) {
+                return 1;
+            } else if (a[0] == b[0]) {
+                return 0;
+            } else {
+                return -1;
+            }
+        });
+        int res = 0;
+        for (int i = 1; i < intervals.length; i++) {
+            if (intervals[i][0] < intervals[i - 1][1]) {
+                res++;
+                intervals[i][1] = Math.min(intervals[i][1], intervals[i - 1][1]);
+            } else {
+
+            }
+        }
+        return res;
+    }
+
+    //56. 合并区间
+    public int[][] merge(int[][] intervals) {
+        Arrays.sort(intervals,(a,b)->{
+            return Integer.compare(a[0], b[0]);
+        });
+        int left = intervals[0][0];
+        int right = intervals[0][1];
+        List<int[]> res = new ArrayList<>();
+        for (int i = 1; i < intervals.length; i++) {
+            if (intervals[i][0] > right) {
+                res.add(new int[]{left, right});
+                left = intervals[i][0];
+                right = intervals[i][1];
+            } else {
+                right = Math.max(right, intervals[i][1]);
+            }
+        }
+        res.add(new int[]{left, right});
+        return res.toArray(new int[res.size()][]);
+    }
+
     public static void main(String[] args) {
-        int[] nums = new int[]{4, 2, 3};
+        int[][] nums = new int[2][2];
+        nums[0] = new int[]{-2147483646, -2147483645};
+        nums[1] = new int[]{2147483646, 2147483647};
         Solution solution = new Solution();
-        System.out.println(solution.largestSumAfterKNegations(nums, 1));
+        System.out.println(solution.findMinArrowShots(nums));
 
     }
+
 
     //test占位
     public int test(int[] nums1, int[] nums2) {
