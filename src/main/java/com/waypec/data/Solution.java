@@ -1250,7 +1250,7 @@ class Solution {
 
     //435. 无重叠区间
     public int eraseOverlapIntervals(int[][] intervals) {
-        Arrays.sort(intervals,(a,b)->{
+        Arrays.sort(intervals, (a, b) -> {
             if (a[0] > b[0]) {
                 return 1;
             } else if (a[0] == b[0]) {
@@ -1273,7 +1273,7 @@ class Solution {
 
     //56. 合并区间
     public int[][] merge(int[][] intervals) {
-        Arrays.sort(intervals,(a,b)->{
+        Arrays.sort(intervals, (a, b) -> {
             return Integer.compare(a[0], b[0]);
         });
         int left = intervals[0][0];
@@ -1291,6 +1291,151 @@ class Solution {
         res.add(new int[]{left, right});
         return res.toArray(new int[res.size()][]);
     }
+
+    //199.二叉树的右视图
+    public List<Integer> rightSideView(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode tmpNode = queue.peek();
+                queue.poll();
+                if (i == size - 1) {
+                    res.add(tmpNode.val);
+                }
+
+                if (tmpNode.left != null) {
+                    queue.add(tmpNode.left);
+                }
+                if (tmpNode.right != null) {
+                    queue.add(tmpNode.right);
+                }
+            }
+        }
+        return res;
+    }
+
+    //637.二叉树的层平均值
+    public List<Double> averageOfLevels(TreeNode root) {
+        List<Double> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            double sum = 0.0;
+            for (int i = 0; i < size; i++) {
+                TreeNode tmpNode = queue.poll();
+                sum += tmpNode.val;
+
+                if (tmpNode.left != null) {
+                    queue.add(tmpNode.left);
+                }
+                if (tmpNode.right != null) {
+                    queue.add(tmpNode.right);
+                }
+            }
+            double avg = sum / size;
+            res.add(avg);
+        }
+        return res;
+
+    }
+
+    //429.N叉树的层序遍历
+//    public List<List<Integer>> levelOrder(Node root) {
+//        List<List<Integer>> res = new ArrayList<>();
+//        if (root == null) {
+//            return res;
+//        }
+//        Queue<Node> queue = new LinkedList<>();
+//        queue.add(root);
+//        while (!queue.isEmpty()) {
+//            int size = queue.size();
+//            List<Integer> tmpList = new ArrayList<>();
+//            for (int i = 0; i < size; i++) {
+//                Node tmpNode = queue.poll();
+//                tmpList.add(tmpNode.val);
+//                if (tmpNode.children != null) {
+//                    int len = tmpNode.children.size();
+//                    for (int j = 0; j < len; j++) {
+//                        queue.add(tmpNode.children.get(j));
+//                    }
+//                }
+//            }
+//            res.add(tmpList);
+//        }
+//        return res;
+//    }
+
+    //515.在每个树行中找最大值
+    public List<Integer> largestValues(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            int max = Integer.MIN_VALUE;
+            for (int i = 0; i < size; i++) {
+                TreeNode tmpNode = queue.poll();
+                max = Math.max(max, tmpNode.val);
+                if (tmpNode.left != null) {
+                    queue.add(tmpNode.left);
+                }
+                if (tmpNode.right != null) {
+                    queue.add(tmpNode.right);
+                }
+            }
+            res.add(max);
+        }
+        return res;
+
+    }
+
+    //116.填充每个节点的下一个右侧节点指针
+    public Node connect(Node root) {
+        if (root == null) {
+            return null;
+        }
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            Node pre = queue.poll();
+            if (pre.left != null) {
+                queue.add(pre.left);
+            }
+            if (pre.right != null) {
+                queue.add(pre.right);
+            }
+            for (int i = 1; i < size; i++) {
+                Node cur = queue.poll();
+                pre.next = cur;
+                pre = cur;
+                
+                if (cur.left != null) {
+                    queue.add(cur.left);
+                }
+                if (cur.right != null) {
+                    queue.add(cur.right);
+                }
+            }
+        }
+
+        return root;
+    }
+
 
     public static void main(String[] args) {
         int[][] nums = new int[2][2];
