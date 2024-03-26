@@ -1423,7 +1423,7 @@ class Solution {
                 Node cur = queue.poll();
                 pre.next = cur;
                 pre = cur;
-                
+
                 if (cur.left != null) {
                     queue.add(cur.left);
                 }
@@ -1434,6 +1434,99 @@ class Solution {
         }
 
         return root;
+    }
+
+    //104.二叉树的最大深度
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int res = 0;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode tmpNode = queue.poll();
+                if (tmpNode.left != null) {
+                    queue.add(tmpNode.left);
+                }
+                if (tmpNode.right != null) {
+                    queue.add(tmpNode.right);
+                }
+            }
+            res++;
+        }
+        return res;
+    }
+
+    //111.二叉树的最小深度
+    public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int res = 0;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            res++;
+            for (int i = 0; i < size; i++) {
+                TreeNode tmpNode = queue.poll();
+                if (tmpNode.left == null && tmpNode.right == null) {
+                    return res;
+                }
+
+                if (tmpNode.left != null) {
+                    queue.add(tmpNode.left);
+                }
+                if (tmpNode.right != null) {
+                    queue.add(tmpNode.right);
+                }
+            }
+
+        }
+        return res;
+    }
+
+    //226.翻转二叉树
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        invertTree(root.left);
+        invertTree(root.right);
+        swapNode(root);
+        return root;
+    }
+
+    public TreeNode invertTree1(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode tmpNode = queue.poll();
+                swapNode(tmpNode);
+                if (tmpNode.left != null) {
+                    queue.add(tmpNode.left);
+                }
+                if (tmpNode.right != null) {
+                    queue.add(tmpNode.right);
+                }
+            }
+        }
+        return root;
+    }
+
+
+    private void swapNode(TreeNode root) {
+        TreeNode tmpNode = root.left;
+        root.left = root.right;
+        root.right = tmpNode;
     }
 
 
