@@ -1432,7 +1432,6 @@ class Solution {
                 }
             }
         }
-
         return root;
     }
 
