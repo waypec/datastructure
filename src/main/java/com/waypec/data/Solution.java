@@ -1,7 +1,5 @@
 package com.waypec.data;
 
-
-import javax.swing.*;
 import java.util.*;
 
 class Solution {
@@ -1526,6 +1524,21 @@ class Solution {
         TreeNode tmpNode = root.left;
         root.left = root.right;
         root.right = tmpNode;
+    }
+
+    //101. 对称二叉树
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        return isMirror(root.left, root.right);
+    }
+
+    public boolean isMirror(TreeNode node1, TreeNode node2) {
+
+        if ()
+
+        return isMirror(node1.left, node2.right);
     }
 
 
