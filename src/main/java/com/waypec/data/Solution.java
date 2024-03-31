@@ -1591,7 +1591,7 @@ class Solution {
         treePath.add(node.val);
         if (node.left == null && node.right == null) {
             StringBuffer tmp = new StringBuffer();
-            for (int i = 0; i < treePath.size()-1; i++) {
+            for (int i = 0; i < treePath.size() - 1; i++) {
                 tmp.append(treePath.get(i));
                 tmp.append("->");
             }
@@ -1609,13 +1609,125 @@ class Solution {
         }
     }
 
+    //404.左叶子之和
+    public int sumOfLeftLeaves1(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int sum = 0;
+        if (root.left != null && root.left.left == null && root.left.right == null) {
+            sum += root.left.val;
+        }
+
+        return sumOfLeftLeaves1(root.left) + sumOfLeftLeaves1(root.right) + sum;
+
+
+    }
+
+
+    public int sumOfLeftLeaves(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        int res = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode tmpNode = queue.poll();
+
+                if (tmpNode.left != null) {
+                    queue.add(tmpNode.left);
+                    if (tmpNode.left.left == null && tmpNode.left.right == null) {
+                        res += tmpNode.left.val;
+                    }
+                }
+
+                if (tmpNode.right != null) {
+                    queue.add(tmpNode.right);
+                }
+            }
+        }
+        return res;
+    }
+
+    //513.找树左下角的值
+    public int findBottomLeftValue(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        int res = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode tmpNode = queue.poll();
+                if (i == 0) {
+                    res = tmpNode.val;
+                }
+                if (tmpNode.left != null) {
+                    queue.add(tmpNode.left);
+                }
+                if (tmpNode.right != null) {
+                    queue.add(tmpNode.right);
+                }
+            }
+        }
+        return res;
+    }
+
+    //112. 路径总和
+//    LinkedList<Integer> path1 = new LinkedList();
+    int sum1 = 0;
+    int res1 = 0;
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        if (root == null) {
+            return false;
+        }
+        hasPathSumHelper(root, targetSum);
+        return res1 != 0;
+    }
+
+    public void hasPathSumHelper(TreeNode root, int targetSum) {
+        if (root.left == null && root.right == null) {
+            sum1 += root.val;
+            if (sum1 == targetSum) {
+                res1++;
+            }
+            return;
+        }
+
+        sum1 += root.val;
+        if (root.left != null) {
+            hasPathSumHelper(root.left, targetSum);
+            sum1 -= root.left.val;
+        }
+        if (root.right != null) {
+            hasPathSumHelper(root.right, targetSum);
+            sum1 -= root.right.val;
+        }
+
+    }
+
 
     public static void main(String[] args) {
-        int[][] nums = new int[2][2];
-        nums[0] = new int[]{-2147483646, -2147483645};
-        nums[1] = new int[]{2147483646, 2147483647};
         Solution solution = new Solution();
-        System.out.println(solution.findMinArrowShots(nums));
+
+        TreeNode node5 = new TreeNode(5);
+        TreeNode node4 = new TreeNode(4);
+        TreeNode node8 = new TreeNode(8);
+        TreeNode node11 = new TreeNode(11);
+        TreeNode node13 = new TreeNode(13);
+        TreeNode node3 = new TreeNode(3);
+        TreeNode node7 = new TreeNode(7);
+        TreeNode node2 = new TreeNode(2);
+        TreeNode node1= new TreeNode(1);
+        node5.left = node4;
+        node5.right = node8;
+        node4.left = node11;
+        node11.left = node7;
+        node11.right = node2;
+        node8.left = node13;
+        node8.right = node4;
+        node4.right = node1;
+        boolean b = solution.hasPathSum(node5,22);
+        System.out.println(b);
 
     }
 
