@@ -1536,9 +1536,77 @@ class Solution {
 
     public boolean isMirror(TreeNode node1, TreeNode node2) {
 
-        if ()
+        if (node1 == null && node2 != null) {
+            return false;
+        }
+        if (node1 != null && node2 == null) {
+            return false;
+        }
+        if (node1 == null && node2 == null) {
+            return true;
+        }
 
-        return isMirror(node1.left, node2.right);
+        //如果node1这棵树的左子节点、node2这棵树的右子节点是对称的，
+        //且node1这棵树的右子节点、node2这棵树的左子结点是对称的，
+        //且node1.val==node2.val，那么node1和node2就是对称的
+        return isMirror(node1.left, node2.right) && isMirror(node1.right, node2.left) && node1.val == node2.val;
+    }
+
+    //110.平衡二叉树
+    public boolean isBalanced(TreeNode root) {
+        return getHeight(root) == -1 ? false : true;
+    }
+
+    public int getHeight(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+
+        int leftHeight = getHeight(node.left);
+        if (leftHeight == -1) {
+            return -1;
+        }
+        int rightHeight = getHeight(node.right);
+        if (rightHeight == -1) {
+            return -1;
+        }
+
+        if (Math.abs(leftHeight - rightHeight) > 1) {
+            return -1;
+        } else {
+            return 1 + Math.max(leftHeight, rightHeight);
+        }
+    }
+
+    List<String> treeRes = new LinkedList<>();
+    LinkedList<Integer> treePath = new LinkedList<>();
+
+    //257. 二叉树的所有路径
+    public List<String> binaryTreePaths(TreeNode root) {
+        treePathHelper(root);
+        return treeRes;
+    }
+
+    public void treePathHelper(TreeNode node) {
+        treePath.add(node.val);
+        if (node.left == null && node.right == null) {
+            StringBuffer tmp = new StringBuffer();
+            for (int i = 0; i < treePath.size()-1; i++) {
+                tmp.append(treePath.get(i));
+                tmp.append("->");
+            }
+            tmp.append(treePath.get(treePath.size() - 1));
+            treeRes.add(tmp.toString());
+        }
+
+        if (node.left != null) {
+            treePathHelper(node.left);
+            treePath.removeLast();
+        }
+        if (node.right != null) {
+            treePathHelper(node.right);
+            treePath.removeLast();
+        }
     }
 
 
