@@ -1724,10 +1724,14 @@ class Solution {
         node11.left = node7;
         node11.right = node2;
         node8.left = node13;
-        node8.right = node4;
+        node8.right = node3;
         node4.right = node1;
-        boolean b = solution.hasPathSum(node5,22);
-        System.out.println(b);
+
+        int sum = solution.sumOfLeftLeaves1(node5);
+        System.out.println(sum);
+
+//        boolean b = solution.hasPathSum(node5,22);
+//        System.out.println(b);
 
     }
 
