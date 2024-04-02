@@ -1676,6 +1676,7 @@ class Solution {
 //    LinkedList<Integer> path1 = new LinkedList();
     int sum1 = 0;
     int res1 = 0;
+
     public boolean hasPathSum(TreeNode root, int targetSum) {
         if (root == null) {
             return false;
@@ -1705,6 +1706,31 @@ class Solution {
 
     }
 
+    //98.验证二叉搜索树
+    //遇到二叉搜索树要想到两点：
+    //1.根节点和左右节点的大小关系，以及左右子树也是二叉搜索树
+    //2.中序遍历的结果，就是从小到大排的
+    TreeNode preNode = null;
+    public boolean isValidBST(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        boolean left = isValidBST(root.left);
+        if (left == false) {
+            return false;
+        }
+        if (preNode != null && preNode.val > root.val) {
+            return false;
+        }
+        preNode = root;
+        boolean right = isValidBST(root.right);
+        if (right == false) {
+            return false;
+        }
+        return true;
+
+    }
+
 
     public static void main(String[] args) {
         Solution solution = new Solution();
@@ -1717,7 +1743,7 @@ class Solution {
         TreeNode node3 = new TreeNode(3);
         TreeNode node7 = new TreeNode(7);
         TreeNode node2 = new TreeNode(2);
-        TreeNode node1= new TreeNode(1);
+        TreeNode node1 = new TreeNode(1);
         node5.left = node4;
         node5.right = node8;
         node4.left = node11;
