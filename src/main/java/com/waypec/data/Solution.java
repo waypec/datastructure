@@ -1711,6 +1711,7 @@ class Solution {
     //1.根节点和左右节点的大小关系，以及左右子树也是二叉搜索树
     //2.中序遍历的结果，就是从小到大排的
     TreeNode preNode = null;
+
     public boolean isValidBST(TreeNode root) {
         if (root == null) {
             return true;
@@ -1731,9 +1732,101 @@ class Solution {
 
     }
 
+    //977.有序数组的平方
+    public int[] sortedSquares(int[] nums) {
+        int i = 0;
+        int j = nums.length - 1;
+        int[] res = new int[nums.length];
+        int index = nums.length - 1;
+        while (j >= i) {
+            int A = nums[i] * nums[i];
+            int B = nums[j] * nums[j];
+            if (A >= B) {
+                res[index--] = A;
+                i++;
+            } else {
+                res[index--] = B;
+                j--;
+            }
+        }
+        return res;
+    }
+
+    //59.螺旋矩阵II
+    public int[][] generateMatrix(int n) {
+        int[][] res = new int[n][n];
+        int left = 0;
+        int right = n - 1;
+        int up = 0;
+        int down = n - 1;
+        int index = 1;
+        while (index <= n * n) {
+            if (up <= down) {
+                for (int i = left; i <= right; i++) {
+                    res[up][i] = index++;
+                }
+                up++;
+            }
+
+            if (left <= right) {
+                for (int i = up; i <= down; i++) {
+                    res[i][right] = index++;
+                }
+                right--;
+            }
+
+            if (up >= down) {
+                for (int i = right; i >= left; i--) {
+                    res[down][i] = index++;
+                }
+                down--;
+            }
+
+            if (left <= right) {
+                for (int i = down; i >= up; i--) {
+                    res[i][left] = index++;
+                }
+                left++;
+            }
+        }
+        return res;
+    }
+
+    //203.移除链表元素
+    public ListNode removeElements(ListNode head, int val) {
+        if (head == null) {
+            return null;
+        }
+        ListNode dummy = new ListNode(-1, head);
+        ListNode cur = head;
+        ListNode pre = dummy;
+        while (cur != null) {
+            if (cur.val == val) {
+                pre.next = cur.next;
+            } else {
+                pre = cur;
+            }
+            cur = cur.next;
+        }
+        return dummy.next;
+
+    }
+
+    //206.反转链表
+    public ListNode reverseList(ListNode head) {
+        ListNode pre = head;
+        ListNode cur = head;
+        while (cur != null) {
+
+        }
+    }
+
 
     public static void main(String[] args) {
+        int[] nums = new int[]{-4, -1, 0, 3, 10};
         Solution solution = new Solution();
+        solution.sortedSquares(nums);
+
 
         TreeNode node5 = new TreeNode(5);
         TreeNode node4 = new TreeNode(4);
