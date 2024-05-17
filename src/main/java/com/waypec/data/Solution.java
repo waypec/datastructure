@@ -1819,6 +1819,7 @@ class Solution {
         while (cur != null) {
 
         }
+        return null;
     }
 
 
